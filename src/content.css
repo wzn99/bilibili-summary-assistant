@@ -840,6 +840,76 @@ html.bsa-modal-open {
   color: #f1f3f6;
 }
 
+/* Style the expanded menu on Chromium without replacing the accessible select. */
+@supports (appearance: base-select) {
+  .bsa-modal-field select,
+  .bsa-modal-history-search select,
+  .bsa-modal-field select::picker(select),
+  .bsa-modal-history-search select::picker(select) {
+    appearance: base-select;
+  }
+
+  .bsa-modal-field select,
+  .bsa-modal-history-search select {
+    padding-right: 11px;
+    background-image: none !important;
+  }
+
+  .bsa-modal-field select::picker-icon,
+  .bsa-modal-history-search select::picker-icon {
+    width: 16px;
+    height: 16px;
+    margin-left: auto;
+    color: #9ca6b5;
+    transition: rotate 160ms ease, color 160ms ease;
+  }
+
+  .bsa-modal-field select:open::picker-icon,
+  .bsa-modal-history-search select:open::picker-icon {
+    rotate: 180deg;
+    color: #00aeec;
+  }
+
+  .bsa-modal-field select::picker(select),
+  .bsa-modal-history-search select::picker(select) {
+    margin-top: 6px;
+    padding: 5px;
+    border: 1px solid rgba(148, 163, 184, 0.28);
+    border-radius: 10px;
+    background: #202631;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.32);
+  }
+
+  .bsa-modal-field select option,
+  .bsa-modal-history-search select option {
+    min-height: 36px;
+    padding: 8px 10px;
+    border-radius: 7px;
+    background: transparent;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .bsa-modal-field select option::checkmark,
+  .bsa-modal-history-search select option::checkmark {
+    display: none;
+  }
+
+  .bsa-modal-field select option:hover,
+  .bsa-modal-field select option:focus-visible,
+  .bsa-modal-history-search select option:hover,
+  .bsa-modal-history-search select option:focus-visible {
+    background: #292f3a;
+  }
+
+  .bsa-modal-field select option:checked,
+  .bsa-modal-history-search select option:checked {
+    background: rgba(0, 174, 236, 0.14);
+    color: #68d7ff;
+    font-weight: 600;
+  }
+}
+
 .bsa-modal-field small {
   color: #9ca6b5;
   font-size: 11px;
@@ -1812,5 +1882,63 @@ html.bsa-modal-open {
   .bsa-modal-history-actions {
     grid-column: 2;
     justify-self: start;
+  }
+}
+
+@supports (appearance: base-select) {
+  #bsa-root[data-theme="light"] .bsa-modal-field select::picker(select),
+  #bsa-root[data-theme="light"] .bsa-modal-history-search select::picker(select) {
+    border-color: #d8dee7;
+    background: #ffffff;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.16);
+  }
+
+  #bsa-root[data-theme="light"] .bsa-modal-field select option,
+  #bsa-root[data-theme="light"] .bsa-modal-history-search select option {
+    background: transparent;
+    color: #253142;
+  }
+
+  #bsa-root[data-theme="light"] .bsa-modal-field select option:hover,
+  #bsa-root[data-theme="light"] .bsa-modal-field select option:focus-visible,
+  #bsa-root[data-theme="light"] .bsa-modal-history-search select option:hover,
+  #bsa-root[data-theme="light"] .bsa-modal-history-search select option:focus-visible {
+    background: #f1f5f8;
+  }
+
+  #bsa-root[data-theme="light"] .bsa-modal-field select option:checked,
+  #bsa-root[data-theme="light"] .bsa-modal-history-search select option:checked {
+    background: #e8f6fc;
+    color: #006f9f;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  @supports (appearance: base-select) {
+    #bsa-root[data-theme="system"] .bsa-modal-field select::picker(select),
+    #bsa-root[data-theme="system"] .bsa-modal-history-search select::picker(select) {
+      border-color: #d8dee7;
+      background: #ffffff;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.16);
+    }
+
+    #bsa-root[data-theme="system"] .bsa-modal-field select option,
+    #bsa-root[data-theme="system"] .bsa-modal-history-search select option {
+      background: transparent;
+      color: #253142;
+    }
+
+    #bsa-root[data-theme="system"] .bsa-modal-field select option:hover,
+    #bsa-root[data-theme="system"] .bsa-modal-field select option:focus-visible,
+    #bsa-root[data-theme="system"] .bsa-modal-history-search select option:hover,
+    #bsa-root[data-theme="system"] .bsa-modal-history-search select option:focus-visible {
+      background: #f1f5f8;
+    }
+
+    #bsa-root[data-theme="system"] .bsa-modal-field select option:checked,
+    #bsa-root[data-theme="system"] .bsa-modal-history-search select option:checked {
+      background: #e8f6fc;
+      color: #006f9f;
+    }
   }
 }

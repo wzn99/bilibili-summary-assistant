@@ -309,6 +309,67 @@ select option {
   background: var(--control-bg);
 }
 
+/* Modern Chromium keeps native select semantics while allowing the popup to
+   follow the extension's visual language. Older browsers use the fallback above. */
+@supports (appearance: base-select) {
+  select,
+  select::picker(select) {
+    appearance: base-select;
+  }
+
+  select {
+    padding-right: 12px;
+    background-image: none !important;
+  }
+
+  select::picker-icon {
+    width: 16px;
+    height: 16px;
+    margin-left: auto;
+    color: var(--text-muted);
+    transition: rotate 160ms ease, color 160ms ease;
+  }
+
+  select:open::picker-icon {
+    rotate: 180deg;
+    color: var(--accent);
+  }
+
+  select::picker(select) {
+    margin-top: 6px;
+    padding: 5px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--panel-bg);
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.16);
+  }
+
+  select option {
+    min-height: 38px;
+    padding: 8px 10px;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--text);
+    align-items: center;
+    cursor: pointer;
+  }
+
+  select option::checkmark {
+    display: none;
+  }
+
+  select option:hover,
+  select option:focus-visible {
+    background: var(--item-bg);
+  }
+
+  select option:checked {
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    color: var(--accent);
+    font-weight: 600;
+  }
+}
+
 :root[data-theme="dark"] select {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='m4 6 4 4 4-4' stroke='%239ca6b5' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
