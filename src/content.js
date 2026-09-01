@@ -1576,6 +1576,21 @@
     return "下载并转写音频";
   }
 
+  function renderSummaryProgress(panel, message) {
+    panel.root.dataset.hasResult = "true";
+    let progress = panel.result.querySelector(".bsa-loading[data-summary-progress]");
+    if (!progress) {
+      panel.result.innerHTML = "";
+      progress = document.createElement("div");
+      progress.className = "bsa-loading";
+      progress.dataset.summaryProgress = "true";
+      progress.setAttribute("role", "status");
+      progress.setAttribute("aria-live", "polite");
+      panel.result.append(progress);
+    }
+    progress.textContent = String(message || "处理中...");
+  }
+
   async function runSummary(panel) {
     let streamedText = "";
     let renderTimer = 0;
@@ -1593,10 +1608,14 @@
         await refreshVideoContext(panel);
       }
 
-      stage = state.subtitles.length ? "准备字幕" : "下载并转写音频";
-      setStatus(panel, state.subtitles.length ? "正在准备字幕..." : "正在准备音频转写...");
+      const requiresTranscription = !state.subtitles.length;
+      stage = requiresTranscription ? "下载并转写音频" : "准备字幕";
+      const preparationStatus = requiresTranscription ? "正在准备音频转写..." : "正在准备字幕...";
+      setStatus(panel, preparationStatus);
+      if (requiresTranscription) renderSummaryProgress(panel, preparationStatus);
       const prepared = await prepareCurrentText(panel, (status) => {
         stage = getTranscriptionFailureStage(status);
+        if (requiresTranscription) renderSummaryProgress(panel, status);
       });
       state.preparedSubtitle = prepared;
       state.qaAnchors = normalizeCachedAnchors(prepared.anchored?.anchors);
@@ -1618,8 +1637,7 @@
 
       stage = "调用总结模型";
       setStatus(panel, `正在生成总结，已建立 ${anchored.anchors.length} 个定位锚点...`);
-      panel.root.dataset.hasResult = "true";
-      panel.result.innerHTML = `<div class="bsa-loading">LLM 正在生成...</div>`;
+      renderSummaryProgress(panel, "LLM 正在生成...");
       panel.summarizeButton.disabled = true;
 
       const renderProgress = () => {

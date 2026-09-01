@@ -298,6 +298,9 @@ function createJsonResponse(data) {
   assert.match(contentSource, /切片音频/);
   assert.match(contentSource, /解析转写结果/);
   assert.match(contentSource, /上传并转写音频/);
+  assert.match(contentSource, /function renderSummaryProgress\(panel, message\)/);
+  assert.match(contentSource, /if \(requiresTranscription\) renderSummaryProgress\(panel, status\)/);
+  assert.match(contentSource, /renderSummaryProgress\(panel, "LLM 正在生成\.\.\."\)/);
   assert.match(contentSource, /阶段：\$\{stage\}；/);
   assert.doesNotMatch(contentSource, /总结完成并已缓存/);
   assert.doesNotMatch(contentSource, /发现 .* 条字幕轨道，已准备好总结/);
