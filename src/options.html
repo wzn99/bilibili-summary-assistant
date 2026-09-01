@@ -1,0 +1,202 @@
+<!-- Version: 0.24.8 -->
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>B站视频总结助手设置</title>
+    <link rel="stylesheet" href="./options.css">
+  </head>
+  <body>
+    <main class="page">
+      <section class="panel settings-panel" id="settingsPage">
+        <header class="page-heading">
+          <div>
+            <p class="eyebrow">B站视频总结助手</p>
+            <h1>设置</h1>
+          </div>
+        </header>
+        <label class="field">
+          <span>API Key</span>
+          <input id="apiKey" type="password" autocomplete="off" placeholder="sk-...">
+        </label>
+        <label class="field">
+          <span>Base URL</span>
+          <input id="baseUrl" type="url" autocomplete="off" placeholder="https://api.deepseek.com">
+        </label>
+        <label class="field">
+          <span>Model Name</span>
+          <input id="model" type="text" autocomplete="off" placeholder="deepseek-v4-flash">
+        </label>
+        <section class="settings-subsection">
+          <h2>无字幕转写</h2>
+            <p class="field-help">无字幕视频会先用 B 站登录状态取得音频，再发送给这里配置的转写服务。DashScope Filetrans 是阿里云百炼提供的千问模型服务，用于长音频转写。OpenAI 兼容接口会先下载 B 站官方音频再上传；超过切片秒数会分段上传。</p>
+          <label class="field">
+            <span>转写服务</span>
+            <select id="transcriptionProvider">
+              <option value="dashscope_filetrans">DashScope Filetrans</option>
+              <option value="openai_compatible">OpenAI 兼容接口</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>转写 API Key</span>
+            <input id="transcriptionApiKey" type="password" autocomplete="off">
+          </label>
+          <label class="field" id="transcriptionBaseUrlField">
+            <span>转写服务 URL</span>
+            <input id="transcriptionBaseUrl" type="url" autocomplete="off" placeholder="https://dashscope.aliyuncs.com/api/v1/services/audio/asr/transcription">
+          </label>
+          <label class="field">
+            <span>转写模型</span>
+            <input id="transcriptionModel" type="text" autocomplete="off" placeholder="qwen-audio-3.0-asr-flash-filetrans 或 openai/whisper-large-v3-turbo">
+            <small class="field-help">OpenRouter 请使用完整模型名，例如 <code>openai/whisper-large-v3-turbo</code>；扩展会自动改用其 Base64 JSON 转写格式。</small>
+          </label>
+          <label class="field" id="transcriptionChunkSecondsField">
+            <span>音频切片秒数</span>
+            <input id="transcriptionChunkSeconds" type="number" min="60" max="3600" step="30">
+            <small class="field-help">只对 OpenAI 兼容转写有效。音频超过这个时长会先切开再上传，默认 300 秒。</small>
+          </label>
+          <label class="field">
+            <span>单次请求超时秒数</span>
+            <input id="transcriptionRequestTimeoutSeconds" type="number" min="30" max="3600" step="10">
+            <small class="field-help">下载音频、上传转写、查询任务只要超过这个时间就算失败。默认 180 秒，网络慢或音频大可调到 300。</small>
+          </label>
+          <label class="field" id="transcriptionPollTimeoutSecondsField">
+            <span>DashScope 最长等待秒数</span>
+            <input id="transcriptionPollTimeoutSeconds" type="number" min="30" max="7200" step="30">
+            <small class="field-help">只对 DashScope Filetrans 有效。提交后等待结果的最长时间，默认 3600 秒。</small>
+          </label>
+          <div class="actions cookie-actions">
+            <span id="cookieStatus" class="field-help">正在读取 B 站登录状态...</span>
+            <button id="refreshCookies" class="secondary-button" type="button">刷新 Cookie</button>
+            <button id="exportCookies" class="secondary-button" type="button">导出 JSON</button>
+            <button id="importCookies" class="secondary-button" type="button">导入 JSON</button>
+            <button id="clearCookies" class="danger-button" type="button">清除导入 Cookie</button>
+            <input id="cookieFile" type="file" accept="application/json,.json" hidden>
+          </div>
+        </section>
+        <section class="settings-subsection">
+          <h2>配置文件</h2>
+          <p class="field-help">导出文件包含当前配置和 API Key，仅用于开发测试，请妥善保管。导入后需要点击“保存”才会生效。</p>
+          <div class="actions config-actions">
+            <button id="exportSettings" class="secondary-button" type="button">导出配置 JSON</button>
+            <button id="importSettings" class="secondary-button" type="button">导入配置 JSON</button>
+            <input id="settingsFile" type="file" accept="application/json,.json" hidden>
+            <span id="settingsFileStatus" class="field-help" role="status"></span>
+          </div>
+        </section>
+        <label class="field">
+          <span>外观</span>
+          <select id="themeMode">
+            <option value="system">跟随系统</option>
+            <option value="light">浅色</option>
+            <option value="dark">深色</option>
+          </select>
+        </label>
+        <div class="privacy-disclosure">
+          <strong>数据传输说明</strong>
+          <p>生成总结或提问时，当前视频的标题、字幕、引用文字和问题会直接发送给你配置的 LLM 服务。API Key 仅保存在当前浏览器本地，开发者不接收这些数据。</p>
+          <a href="./privacy.html" target="_blank" rel="noopener noreferrer">查看隐私政策</a>
+        </div>
+        <label class="setting-toggle">
+          <span class="setting-toggle-copy">
+            <strong>允许发送给所配置的 LLM 服务</strong>
+            <small>这是生成总结和回答问题所必需的，可随时关闭。</small>
+          </span>
+          <input id="providerDataConsent" type="checkbox" role="switch">
+        </label>
+        <label class="setting-toggle">
+          <span class="setting-toggle-copy">
+            <strong>进入视频后自动总结</strong>
+            <small>打开视频并完成字幕或音频准备后自动开始总结；关闭后需要手动点击“总结”。</small>
+          </span>
+          <input id="autoSummarize" type="checkbox" role="switch">
+        </label>
+        <label class="field">
+          <span>最大字幕字符数</span>
+          <input id="maxTranscriptChars" type="number" min="2000" step="1000">
+        </label>
+        <label class="field">
+          <span>插件区域最大高度（像素）</span>
+          <input id="panelMaxHeight" type="number" min="420" max="1200" step="20">
+          <small class="field-help">取值范围 420–1200；面板可随网页一起滚动。</small>
+        </label>
+        <label class="field">
+          <span>总结正文字号（像素）</span>
+          <input id="summaryFontSize" type="number" min="11" max="18" step="1">
+          <small class="field-help">只调整概览、时间线正文和亮点文字，不改变标题、按钮与设置界面。</small>
+        </label>
+        <label class="setting-toggle">
+          <span class="setting-toggle-copy">
+            <strong>紧凑时间线</strong>
+            <small>将章节做成时间线内的子标签，一次只显示一个时间段。</small>
+          </span>
+          <input id="compactTimeline" type="checkbox" role="switch">
+        </label>
+        <label class="setting-toggle">
+          <span class="setting-toggle-copy">
+            <strong>选中文字后提问</strong>
+            <small>在总结内容中选中文字时显示“提问”，并把引用带入提问区。</small>
+          </span>
+          <input id="selectionAskEnabled" type="checkbox" role="switch">
+        </label>
+        <label class="setting-toggle">
+          <span class="setting-toggle-copy">
+            <strong>屏蔽弹幕列表</strong>
+            <small>隐藏视频右侧的弹幕列表区域，不影响播放器中的弹幕。</small>
+          </span>
+          <input id="hideDanmakuList" type="checkbox" role="switch">
+        </label>
+        <label class="field">
+          <span>右栏顶部顺序</span>
+          <select id="sidebarOrder">
+            <option value="summary-first">视频总结在上</option>
+            <option value="author-first">UP 主信息在上</option>
+          </select>
+        </label>
+        <div class="actions">
+          <button id="save" type="button">保存</button>
+          <span id="status" role="status"></span>
+        </div>
+      </section>
+      <section class="panel history-panel" id="historyPage">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">B站视频总结助手</p>
+            <h1>总结历史</h1>
+            <p id="historyMeta">正在读取缓存...</p>
+          </div>
+          <button id="refreshHistory" class="secondary-button" type="button">刷新</button>
+        </div>
+        <div class="history-toolbar" id="historyToolbar" hidden>
+          <label class="select-all">
+            <input id="selectAllHistory" type="checkbox">
+            <span>全选</span>
+          </label>
+          <span id="selectedMeta">已选择 0 条</span>
+          <button id="deleteSelected" class="danger-button" type="button" disabled>删除所选</button>
+        </div>
+        <form class="history-search" id="historySearch">
+          <label class="history-search-mode">
+            <span class="sr-only">查询方向</span>
+            <select id="historySearchMode">
+              <option value="title">标题关键词</option>
+              <option value="summary">总结关键词</option>
+              <option value="ai">AI 智能查询</option>
+            </select>
+          </label>
+          <label class="history-search-input">
+            <span class="sr-only">查询内容</span>
+            <input id="historySearchQuery" type="search" autocomplete="off" placeholder="输入关键词或自然语言查询">
+          </label>
+          <button id="historySearchSubmit" type="submit">查询</button>
+          <button id="historySearchClear" class="secondary-button" type="button">清除筛选</button>
+          <span id="historySearchStatus" class="field-help" role="status"></span>
+        </form>
+        <div id="historyList" class="history-list"></div>
+      </section>
+    </main>
+    <script src="./history-search.js"></script>
+    <script src="./options.js"></script>
+  </body>
+</html>

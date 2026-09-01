@@ -1,0 +1,18 @@
+release/
+.codex-debug/
+*.log
+.DS_Store
+Thumbs.db
+node_modules/
+
+# 本地配置与密钥导出（禁止提交）
+.env
+.env.*
+!.env.example
+配置文件JSON.json
+settings-export*.json
+
+# 一次性调试产物
+patch_*.py
+debug-*.md
+TASK_LOG.md
