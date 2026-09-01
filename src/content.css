@@ -152,25 +152,6 @@ html.bsa-modal-open {
   gap: 8px;
 }
 
-.bsa-run-status {
-  min-width: 0;
-  max-width: min(250px, 34vw);
-  overflow: hidden;
-  color: #98a4b3;
-  font-size: 11px;
-  line-height: 1.35;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.bsa-run-status[data-tone="ok"] {
-  color: #66d6a0;
-}
-
-.bsa-run-status[data-tone="error"] {
-  color: #ff7a8a;
-}
-
 .bsa-collapse {
   flex: 0 0 32px;
 }
@@ -1476,18 +1457,6 @@ html.bsa-modal-open {
 
   .bsa-status {
     color: #667085;
-  }
-
-  .bsa-run-status {
-    color: #667085;
-  }
-
-  .bsa-run-status[data-tone="ok"] {
-    color: #168a57;
-  }
-
-  .bsa-run-status[data-tone="error"] {
-    color: #c43c43;
   }
 
   .bsa-status[data-tone="error"]:not(:empty) {

@@ -6,6 +6,8 @@
   const modalSelectedHistoryKeys = new Set();
   let modalHistoryEntries = [];
   let modalHistorySearchToken = 0;
+  let modalSettingsSaveTimer = 0;
+  let modalSettingsSaveRevision = 0;
   if (window.__bilibiliSummaryAssistantLoaded === BSA_VERSION) return;
   window.__bilibiliSummaryAssistantLoaded = BSA_VERSION;
   document.getElementById("bsa-root")?.remove();
@@ -82,7 +84,6 @@
               <span class="bsa-collapse-glyph" aria-hidden="true"></span>
             </button>
             <div class="bsa-title">视频总结</div>
-            <span class="bsa-run-status" role="status" aria-live="polite"></span>
           </div>
           <div class="bsa-header-actions">
             <span class="bsa-summary-action">
@@ -119,7 +120,6 @@
     return {
       root,
       status: root.querySelector(".bsa-status"),
-      runStatus: root.querySelector(".bsa-run-status"),
       result: root.querySelector(".bsa-result"),
       summaryAction: root.querySelector(".bsa-summary-action"),
       summarizeButton: root.querySelector('[data-action="summarize"]'),
@@ -660,6 +660,11 @@
       }
 
       if (action === "close-modal") {
+        if (panel.modalContent.querySelector(".bsa-modal-form")) {
+          clearTimeout(modalSettingsSaveTimer);
+          modalSettingsSaveTimer = 0;
+          await saveModalSettings(panel);
+        }
         closeModal(panel);
       }
 
@@ -670,10 +675,6 @@
       if (action === "clear-question-quote") {
         state.questionQuote = "";
         renderQuestionQuote(panel);
-      }
-
-      if (action === "save-modal-settings") {
-        await saveModalSettings(panel);
       }
 
       if (action === "refresh-modal-history") {
@@ -923,7 +924,7 @@
         <label class="bsa-modal-toggle"><span><strong>选中文字后提问</strong><small>选中总结文字时显示“提问”，并把引用带入提问区。</small></span><input id="bsa-modal-selection-ask" type="checkbox" role="switch"></label>
         <label class="bsa-modal-toggle"><span><strong>屏蔽弹幕列表</strong><small>隐藏右侧弹幕列表，不影响播放器内弹幕。</small></span><input id="bsa-modal-hide-danmaku" type="checkbox" role="switch"></label>
         <label class="bsa-modal-field"><span>右栏顶部顺序</span><select id="bsa-modal-sidebar-order"><option value="summary-first">视频总结在上</option><option value="author-first">UP 主信息在上</option></select></label>
-        <div class="bsa-modal-actions"><button class="bsa-modal-primary" type="button" data-action="save-modal-settings">保存</button><button class="bsa-modal-secondary" type="button" data-action="open-full-options">Cookie 与配置文件工具</button><span class="bsa-modal-status" role="status"></span></div>
+        <div class="bsa-modal-actions"><button class="bsa-modal-secondary" type="button" data-action="open-full-options">Cookie 与配置文件工具</button><span class="bsa-modal-status" role="status"></span></div>
       </div>
     `;
     panel.modalContent.querySelector("#bsa-modal-api-key").value = settings.apiKey || "";
@@ -946,9 +947,23 @@
     panel.modalContent.querySelector("#bsa-modal-selection-ask").checked = settings.selectionAskEnabled !== false;
     panel.modalContent.querySelector("#bsa-modal-hide-danmaku").checked = settings.hideDanmakuList !== false;
     panel.modalContent.querySelector("#bsa-modal-sidebar-order").value = settings.sidebarOrder === "author-first" ? "author-first" : "summary-first";
+    const form = panel.modalContent.querySelector(".bsa-modal-form");
+    form.addEventListener("input", () => scheduleModalSettingsSave(panel));
+    form.addEventListener("change", () => scheduleModalSettingsSave(panel, 0));
+    form.addEventListener("focusout", (event) => {
+      if (event.target?.matches("input, select")) scheduleModalSettingsSave(panel, 0);
+    });
     panel.modalContent.querySelector("#bsa-modal-transcription-provider").addEventListener("change", () => updateModalTranscriptionVisibility(panel.modalContent));
     updateModalTranscriptionVisibility(panel.modalContent);
     showModal(panel);
+  }
+
+  function scheduleModalSettingsSave(panel, delay = 450) {
+    clearTimeout(modalSettingsSaveTimer);
+    modalSettingsSaveTimer = window.setTimeout(() => {
+      modalSettingsSaveTimer = 0;
+      void saveModalSettings(panel);
+    }, delay);
   }
 
   function updateModalTranscriptionVisibility(content) {
@@ -982,18 +997,15 @@
       hideDanmakuList: content.querySelector("#bsa-modal-hide-danmaku")?.checked !== false,
       sidebarOrder: content.querySelector("#bsa-modal-sidebar-order")?.value === "author-first" ? "author-first" : "summary-first"
     };
+    if (!content.querySelector(".bsa-modal-form")) return;
+    const revision = ++modalSettingsSaveRevision;
     const status = content.querySelector(".bsa-modal-status");
-    const saveButton = content.querySelector('[data-action="save-modal-settings"]');
-    if (saveButton) saveButton.disabled = true;
-    if (status) status.textContent = "正在保存并检查域名权限...";
     try {
-      await requestProviderOrigins(settings);
       await send("SAVE_SETTINGS", { settings });
-      if (status) status.textContent = "已保存";
+      await requestProviderOrigins(settings);
+      if (revision === modalSettingsSaveRevision && status) status.textContent = "";
     } catch (error) {
-      if (status) status.textContent = error?.message || String(error);
-    } finally {
-      if (saveButton) saveButton.disabled = false;
+      if (revision === modalSettingsSaveRevision && status) status.textContent = error?.message || String(error);
     }
   }
 
@@ -1236,6 +1248,8 @@
   }
 
   function closeModal(panel) {
+    clearTimeout(modalSettingsSaveTimer);
+    modalSettingsSaveTimer = 0;
     panel.modalLayer.hidden = true;
     panel.modalContent.innerHTML = "";
     delete panel.root.dataset.modalOpen;
@@ -2698,11 +2712,6 @@
   function setStatus(panel, text, tone = "") {
     panel.status.textContent = text;
     panel.status.dataset.tone = tone;
-    if (panel.runStatus) {
-      panel.runStatus.textContent = text;
-      panel.runStatus.dataset.tone = tone;
-      panel.runStatus.title = text;
-    }
     if (text && tone === "error") panel.root.dataset.hasError = "true";
     else delete panel.root.dataset.hasError;
   }

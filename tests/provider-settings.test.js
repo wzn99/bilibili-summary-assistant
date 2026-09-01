@@ -290,7 +290,7 @@ function createJsonResponse(data) {
   assert.equal(JSON.parse(fs.readFileSync(path.join(__dirname, "..", "manifest.json"), "utf8")).content_scripts[0].js[0], "src/history-search.js");
   assert.match(contentSource, /setInterval\([\s\S]*?15000\)/);
     assert.match(contentSource, /state\.contextLoading = false;\s+updateSummaryButton\(panel\);/);
-    assert.match(contentSource, /class="bsa-run-status"/);
+    assert.doesNotMatch(contentSource, /class="bsa-run-status"/);
   assert.match(contentSource, /BSA_TRANSCRIBE_STREAM/);
   assert.match(contentSource, /streamTranscription/);
   assert.match(contentSource, /function getTranscriptionFailureStage\(status\)/);
@@ -301,6 +301,9 @@ function createJsonResponse(data) {
   assert.match(contentSource, /阶段：\$\{stage\}；/);
   assert.doesNotMatch(contentSource, /总结完成并已缓存/);
   assert.doesNotMatch(contentSource, /发现 .* 条字幕轨道，已准备好总结/);
+  assert.doesNotMatch(contentSource, /data-action="save-modal-settings"/);
+  assert.match(contentSource, /scheduleModalSettingsSave\(panel/);
+  assert.match(contentSource, /await send\("SAVE_SETTINGS", \{ settings \}\);\s+await requestProviderOrigins\(settings\);/);
   assert.match(contentSource, /id="bsa-modal-transcription-api-key"/);
   assert.match(contentSource, /id="bsa-modal-panel-max-height"/);
   assert.match(contentSource, /id="bsa-modal-summary-font-size"/);
