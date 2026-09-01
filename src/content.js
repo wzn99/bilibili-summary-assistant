@@ -901,15 +901,15 @@
         <h3 class="bsa-modal-section-title">总结服务</h3>
         <label class="bsa-modal-field"><span>API Key</span><input id="bsa-modal-api-key" type="password" autocomplete="off" placeholder="sk-..."></label>
         <label class="bsa-modal-field"><span>Base URL</span><input id="bsa-modal-base-url" type="url" autocomplete="off" placeholder="https://api.deepseek.com"></label>
-        <label class="bsa-modal-field"><span>Model Name</span><input id="bsa-modal-model" type="text" autocomplete="off"></label>
+        <label class="bsa-modal-field"><span>Model Name</span><input id="bsa-modal-model" type="text" autocomplete="off"><small>推荐： deepseek-v4-flash、qwen3.7-flash</small></label>
         <div class="bsa-modal-disclosure"><strong>数据传输说明</strong><p>生成总结或提问时，当前视频的标题、字幕、引用文字和问题会直接发送给你配置的 LLM 服务。API Key 仅保存在当前浏览器本地，开发者不接收这些数据。</p></div>
         <label class="bsa-modal-toggle"><span><strong>允许发送给所配置的 LLM 服务</strong><small>这是生成总结和回答问题所必需的，可随时关闭。</small></span><input id="bsa-modal-provider-consent" type="checkbox" role="switch"></label>
 
-        <h3 class="bsa-modal-section-title">无字幕转写</h3>
+        <h3 class="bsa-modal-section-title">无字幕时的音频转写服务</h3>
         <label class="bsa-modal-field"><span>转写服务</span><select id="bsa-modal-transcription-provider"><option value="dashscope_filetrans">DashScope Filetrans</option><option value="openai_compatible">OpenAI 兼容接口</option></select></label>
-        <label class="bsa-modal-field"><span>转写 API Key</span><input id="bsa-modal-transcription-api-key" type="password" autocomplete="off"></label>
-        <label class="bsa-modal-field"><span>转写服务 URL</span><input id="bsa-modal-transcription-base-url" type="url" autocomplete="off"></label>
-        <label class="bsa-modal-field"><span>转写模型</span><input id="bsa-modal-transcription-model" type="text" autocomplete="off"><small>OpenRouter 可填写 openai/whisper-large-v3-turbo。</small></label>
+        <label class="bsa-modal-field"><span>API Key</span><input id="bsa-modal-transcription-api-key" type="password" autocomplete="off"></label>
+        <label class="bsa-modal-field"><span>Base URL</span><input id="bsa-modal-transcription-base-url" type="url" autocomplete="off"></label>
+        <label class="bsa-modal-field"><span>Model Name</span><input id="bsa-modal-transcription-model" type="text" autocomplete="off"><small>推荐： openai/whisper-large-v3-turbo</small></label>
         <label class="bsa-modal-field" data-transcription-mode="openai_compatible"><span>音频切片秒数</span><input id="bsa-modal-transcription-chunk-seconds" type="number" min="60" max="3600" step="30"></label>
         <label class="bsa-modal-field"><span>单次请求超时秒数</span><input id="bsa-modal-transcription-request-timeout" type="number" min="30" max="3600" step="10"></label>
         <label class="bsa-modal-field" data-transcription-mode="dashscope_filetrans"><span>DashScope 最长等待秒数</span><input id="bsa-modal-transcription-poll-timeout" type="number" min="30" max="7200" step="30"></label>

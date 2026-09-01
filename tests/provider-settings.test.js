@@ -308,6 +308,10 @@ function createJsonResponse(data) {
   assert.match(contentSource, /scheduleModalSettingsSave\(panel/);
   assert.match(contentSource, /await send\("SAVE_SETTINGS", \{ settings \}\);\s+await requestProviderOrigins\(settings\);/);
   assert.match(contentSource, /id="bsa-modal-transcription-api-key"/);
+  assert.match(contentSource, /无字幕时的音频转写服务/);
+  assert.match(contentSource, /推荐： deepseek-v4-flash、qwen3\.7-flash/);
+  assert.match(contentSource, /推荐： openai\/whisper-large-v3-turbo/);
+  assert.doesNotMatch(contentSource, /OpenRouter 可填写/);
   assert.match(contentSource, /id="bsa-modal-panel-max-height"/);
   assert.match(contentSource, /id="bsa-modal-summary-font-size"/);
   assert.match(contentSource, /send\("CHECK_PROVIDER_ORIGINS", \{ settings \}\)/);
@@ -320,6 +324,9 @@ function createJsonResponse(data) {
 
   const optionsSource = fs.readFileSync(path.join(__dirname, "..", "src", "options.html"), "utf8");
   assert.match(optionsSource, /阿里云百炼提供的千问模型服务/);
+  assert.match(optionsSource, /无字幕时的音频转写服务/);
+  assert.match(optionsSource, /推荐： deepseek-v4-flash、qwen3\.7-flash/);
+  assert.match(optionsSource, /推荐： openai\/whisper-large-v3-turbo/);
   assert.match(optionsSource, /id="transcriptionBaseUrl"/);
   assert.match(optionsSource, /id="transcriptionChunkSeconds"/);
   assert.match(optionsSource, /id="transcriptionRequestTimeoutSeconds"/);

@@ -27,9 +27,10 @@
         <label class="field">
           <span>Model Name</span>
           <input id="model" type="text" autocomplete="off" placeholder="deepseek-v4-flash">
+          <small class="field-help">推荐： deepseek-v4-flash、qwen3.7-flash</small>
         </label>
         <section class="settings-subsection">
-          <h2>无字幕转写</h2>
+          <h2>无字幕时的音频转写服务</h2>
             <p class="field-help">无字幕视频会先用 B 站登录状态取得音频，再发送给这里配置的转写服务。DashScope Filetrans 是阿里云百炼提供的千问模型服务，用于长音频转写。OpenAI 兼容接口会先下载 B 站官方音频再上传；超过切片秒数会分段上传。</p>
           <label class="field">
             <span>转写服务</span>
@@ -39,17 +40,17 @@
             </select>
           </label>
           <label class="field">
-            <span>转写 API Key</span>
+            <span>API Key</span>
             <input id="transcriptionApiKey" type="password" autocomplete="off">
           </label>
           <label class="field" id="transcriptionBaseUrlField">
-            <span>转写服务 URL</span>
+            <span>Base URL</span>
             <input id="transcriptionBaseUrl" type="url" autocomplete="off" placeholder="https://dashscope.aliyuncs.com/api/v1/services/audio/asr/transcription">
           </label>
           <label class="field">
-            <span>转写模型</span>
+            <span>Model Name</span>
             <input id="transcriptionModel" type="text" autocomplete="off" placeholder="qwen-audio-3.0-asr-flash-filetrans 或 openai/whisper-large-v3-turbo">
-            <small class="field-help">OpenRouter 请使用完整模型名，例如 <code>openai/whisper-large-v3-turbo</code>；扩展会自动改用其 Base64 JSON 转写格式。</small>
+            <small class="field-help">推荐： openai/whisper-large-v3-turbo</small>
           </label>
           <label class="field" id="transcriptionChunkSecondsField">
             <span>音频切片秒数</span>
