@@ -322,6 +322,7 @@ function createJsonResponse(data) {
   assert.match(contentCssSource, /height:\s*calc\(var\(--bsa-panel-max-height\) - 74px\)/);
   assert.doesNotMatch(contentCssSource, /height:\s*min\(528px,\s*calc\(var\(--bsa-panel-max-height\)/);
   assert.match(contentCssSource, /\.bsa-modal-field select,[\s\S]*?appearance:\s*none/);
+  assert.match(contentCssSource, /\.bsa-modal-history-search input\[type="search"\][\s\S]*?background-color:\s*#202631/);
   assert.match(contentCssSource, /#bsa-root\[data-theme="light"\][\s\S]*?\.bsa-modal-history-search input\[type="search"\]/);
   assert.match(contentCssSource, /\.bsa-modal input\[type="checkbox"\]:checked::after/);
 
