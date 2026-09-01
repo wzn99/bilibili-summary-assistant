@@ -321,12 +321,18 @@ function createJsonResponse(data) {
   const contentCssSource = fs.readFileSync(path.join(__dirname, "..", "src", "content.css"), "utf8");
   assert.match(contentCssSource, /height:\s*calc\(var\(--bsa-panel-max-height\) - 74px\)/);
   assert.doesNotMatch(contentCssSource, /height:\s*min\(528px,\s*calc\(var\(--bsa-panel-max-height\)/);
+  assert.match(contentCssSource, /\.bsa-modal-field select,[\s\S]*?appearance:\s*none/);
+  assert.match(contentCssSource, /#bsa-root\[data-theme="light"\][\s\S]*?\.bsa-modal-history-search input\[type="search"\]/);
+  assert.match(contentCssSource, /\.bsa-modal input\[type="checkbox"\]:checked::after/);
 
   const optionsSource = fs.readFileSync(path.join(__dirname, "..", "src", "options.html"), "utf8");
   assert.match(optionsSource, /阿里云百炼提供的千问模型服务/);
   assert.match(optionsSource, /无字幕时的音频转写服务/);
   assert.match(optionsSource, /推荐： deepseek-v4-flash、qwen3\.7-flash/);
   assert.match(optionsSource, /推荐： openai\/whisper-large-v3-turbo/);
+  const optionsCssSource = fs.readFileSync(path.join(__dirname, "..", "src", "options.css"), "utf8");
+  assert.match(optionsCssSource, /select\s*\{[\s\S]*?appearance:\s*none/);
+  assert.match(optionsCssSource, /\.history-select input\[type="checkbox"\]:checked::after/);
   assert.match(optionsSource, /id="transcriptionBaseUrl"/);
   assert.match(optionsSource, /id="transcriptionChunkSeconds"/);
   assert.match(optionsSource, /id="transcriptionRequestTimeoutSeconds"/);

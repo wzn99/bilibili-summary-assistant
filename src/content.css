@@ -810,6 +810,36 @@ html.bsa-modal-open {
   font: inherit;
 }
 
+.bsa-modal-field select,
+.bsa-modal-history-search select {
+  appearance: none;
+  padding-right: 38px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='m4 6 4 4 4-4' stroke='%239ca6b5' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  cursor: pointer;
+  transition: border-color 140ms ease, background-color 140ms ease, box-shadow 140ms ease;
+}
+
+.bsa-modal-field select:hover,
+.bsa-modal-history-search select:hover {
+  border-color: rgba(0, 174, 236, 0.62);
+}
+
+.bsa-modal-field select:focus-visible,
+.bsa-modal-history-search select:focus-visible {
+  border-color: #00aeec;
+  box-shadow: 0 0 0 3px rgba(0, 174, 236, 0.2);
+  outline: none;
+}
+
+.bsa-modal-field select option,
+.bsa-modal-history-search select option {
+  background: #202631;
+  color: #f1f3f6;
+}
+
 .bsa-modal-field small {
   color: #9ca6b5;
   font-size: 11px;
@@ -873,9 +903,50 @@ html.bsa-modal-open {
 }
 
 .bsa-modal-toggle input[type="checkbox"] {
+  position: relative;
+  flex: 0 0 auto;
+  appearance: none;
   width: 18px;
   height: 18px;
-  accent-color: #00aeec;
+  margin: 0;
+  border: 1px solid rgba(148, 163, 184, 0.48);
+  border-radius: 4px;
+  background: #202631;
+  cursor: pointer;
+}
+
+.bsa-modal input[type="checkbox"]:not([role="switch"]) {
+  position: relative;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  border: 1px solid rgba(148, 163, 184, 0.48);
+  border-radius: 4px;
+  background: #202631;
+  cursor: pointer;
+}
+
+.bsa-modal input[type="checkbox"]:checked {
+  border-color: #00aeec;
+  background: #00aeec;
+}
+
+.bsa-modal input[type="checkbox"]:checked::after {
+  position: absolute;
+  top: 2px;
+  left: 5px;
+  width: 5px;
+  height: 9px;
+  border-right: 2px solid #ffffff;
+  border-bottom: 2px solid #ffffff;
+  content: "";
+  transform: rotate(45deg);
+}
+
+.bsa-modal input[type="checkbox"]:focus-visible {
+  outline: 3px solid rgba(0, 174, 236, 0.24);
+  outline-offset: 2px;
 }
 
 .bsa-modal-actions,
@@ -1384,6 +1455,22 @@ html.bsa-modal-open {
       color: #253142;
     }
 
+    .bsa-modal-field select,
+    .bsa-modal-history-search select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='m4 6 4 4 4-4' stroke='%23465163' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    }
+
+    .bsa-modal-field select option,
+    .bsa-modal-history-search select option {
+      background: #ffffff;
+      color: #253142;
+    }
+
+    .bsa-modal input[type="checkbox"]:not(:checked) {
+      border-color: #b9c3d0;
+      background: #ffffff;
+    }
+
     .bsa-modal-history-search-status {
       color: #687181;
     }
@@ -1636,6 +1723,29 @@ html.bsa-modal-open {
   .bsa-modal-history-item {
     border-color: #d8dee7;
     background: #f7f9fb;
+  }
+
+  .bsa-modal-history-search select,
+  .bsa-modal-history-search input[type="search"] {
+    border-color: #d8dee7;
+    background-color: #f7f9fb;
+    color: #253142;
+  }
+
+  .bsa-modal-field select,
+  .bsa-modal-history-search select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='m4 6 4 4 4-4' stroke='%23465163' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  }
+
+  .bsa-modal-field select option,
+  .bsa-modal-history-search select option {
+    background: #ffffff;
+    color: #253142;
+  }
+
+  .bsa-modal input[type="checkbox"]:not(:checked) {
+    border-color: #b9c3d0;
+    background: #ffffff;
   }
 
   .bsa-modal-disclosure {
