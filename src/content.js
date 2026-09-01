@@ -1368,7 +1368,7 @@
     delete panel.summaryAction.dataset.tooltip;
     panel.summarizeButton.disabled = false;
     if (!restoredFromCache) {
-      setStatus(panel, `发现 ${state.subtitles.length} 条字幕轨道，已准备好总结。`, "ok");
+      setStatus(panel, "");
     }
     updateSummaryButton(panel);
     state.contextLoading = false;

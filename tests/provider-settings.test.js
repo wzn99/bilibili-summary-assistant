@@ -300,6 +300,7 @@ function createJsonResponse(data) {
   assert.match(contentSource, /上传并转写音频/);
   assert.match(contentSource, /阶段：\$\{stage\}；/);
   assert.doesNotMatch(contentSource, /总结完成并已缓存/);
+  assert.doesNotMatch(contentSource, /发现 .* 条字幕轨道，已准备好总结/);
   assert.match(contentSource, /id="bsa-modal-transcription-api-key"/);
   assert.match(contentSource, /id="bsa-modal-panel-max-height"/);
   assert.match(contentSource, /id="bsa-modal-summary-font-size"/);
