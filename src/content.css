@@ -851,8 +851,11 @@ html.bsa-modal-open {
 
   .bsa-modal-field select,
   .bsa-modal-history-search select {
+    display: flex;
+    align-items: center;
     padding-right: 11px;
     background-image: none !important;
+    line-height: 1.2;
   }
 
   .bsa-modal-field select::picker-icon,
@@ -908,6 +911,10 @@ html.bsa-modal-open {
     color: #68d7ff;
     font-weight: 600;
   }
+}
+
+#bsa-root input[type="number"] {
+  color-scheme: dark;
 }
 
 .bsa-modal-field small {
@@ -1913,7 +1920,15 @@ html.bsa-modal-open {
   }
 }
 
+#bsa-root[data-theme="light"] input[type="number"] {
+  color-scheme: light;
+}
+
 @media (prefers-color-scheme: light) {
+  #bsa-root[data-theme="system"] input[type="number"] {
+    color-scheme: light;
+  }
+
   @supports (appearance: base-select) {
     #bsa-root[data-theme="system"] .bsa-modal-field select::picker(select),
     #bsa-root[data-theme="system"] .bsa-modal-history-search select::picker(select) {

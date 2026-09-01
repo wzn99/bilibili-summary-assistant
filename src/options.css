@@ -318,8 +318,11 @@ select option {
   }
 
   select {
+    display: flex;
+    align-items: center;
     padding-right: 12px;
     background-image: none !important;
+    line-height: 1.2;
   }
 
   select::picker-icon {
@@ -367,6 +370,20 @@ select option {
     background: color-mix(in srgb, var(--accent) 12%, transparent);
     color: var(--accent);
     font-weight: 600;
+  }
+}
+
+input[type="number"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] input[type="number"] {
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"] input[type="number"] {
+    color-scheme: dark;
   }
 }
 
