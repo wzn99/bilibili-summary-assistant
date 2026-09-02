@@ -100,7 +100,8 @@ vm.runInNewContext(source, context, { filename: sourcePath });
 (async () => {
   const defaultSettings = context.__test.normalizeSettings({});
   assert.equal(defaultSettings.providerDataConsent, true);
-  assert.equal(defaultSettings.panelMaxHeight, 640);
+  assert.equal(defaultSettings.panelMaxHeight, 720);
+  assert.equal(context.__test.normalizeSettings({ panelMaxHeight: 640 }).panelMaxHeight, 640);
   assert.equal(defaultSettings.summaryFontSize, 13);
   const clampedDisplaySettings = context.__test.normalizeSettings({ panelMaxHeight: 9999, summaryFontSize: 3 });
   assert.equal(clampedDisplaySettings.panelMaxHeight, 1200);

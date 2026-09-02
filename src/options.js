@@ -11,7 +11,7 @@ const DEFAULT_SETTINGS = {
   transcriptionRequestTimeoutSeconds: 180,
   transcriptionPollTimeoutSeconds: 3600,
   maxTranscriptChars: 120000,
-  panelMaxHeight: 640,
+  panelMaxHeight: 720,
   summaryFontSize: 13,
   hideDanmakuList: true,
   sidebarOrder: "summary-first",

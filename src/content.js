@@ -51,7 +51,7 @@
     themeMode: "system",
     compactTimeline: false,
     selectionAskEnabled: true,
-    panelMaxHeight: 640,
+    panelMaxHeight: 720,
     summaryFontSize: 13,
     autoSummarize: false,
     autoSummaryStartedContextId: 0,
@@ -204,7 +204,7 @@
       selectionAskEnabled: true,
       autoSummarize: false,
       providerDataConsent: true,
-      panelMaxHeight: 640,
+      panelMaxHeight: 720,
       summaryFontSize: 13
     }).then((settings) => {
       state.hideDanmakuList = settings.hideDanmakuList !== false;
@@ -212,7 +212,7 @@
       applyThemeMode(panel, settings.themeMode);
       state.compactTimeline = settings.compactTimeline === true;
       state.selectionAskEnabled = settings.selectionAskEnabled !== false;
-      state.panelMaxHeight = clampNumber(settings.panelMaxHeight, 420, 1200, 640);
+      state.panelMaxHeight = clampNumber(settings.panelMaxHeight, 420, 1200, 720);
       state.summaryFontSize = clampNumber(settings.summaryFontSize, 11, 18, 13);
       applyPanelDisplaySize(panel);
       state.autoSummarize = settings.autoSummarize === true;
@@ -248,7 +248,7 @@
         if (!state.selectionAskEnabled) hideSelectionPopover(panel);
       }
       if (changes.panelMaxHeight || changes.summaryFontSize) {
-        state.panelMaxHeight = clampNumber(changes.panelMaxHeight?.newValue ?? state.panelMaxHeight, 420, 1200, 640);
+        state.panelMaxHeight = clampNumber(changes.panelMaxHeight?.newValue ?? state.panelMaxHeight, 420, 1200, 720);
         state.summaryFontSize = clampNumber(changes.summaryFontSize?.newValue ?? state.summaryFontSize, 11, 18, 13);
         applyPanelDisplaySize(panel);
       }
@@ -949,7 +949,7 @@
     panel.modalContent.querySelector("#bsa-modal-provider-consent").checked = settings.providerDataConsent === true;
     panel.modalContent.querySelector("#bsa-modal-auto-summarize").checked = settings.autoSummarize === true;
     panel.modalContent.querySelector("#bsa-modal-max-chars").value = Math.max(Number(settings.maxTranscriptChars || 120000), 120000);
-    panel.modalContent.querySelector("#bsa-modal-panel-max-height").value = clampNumber(settings.panelMaxHeight, 420, 1200, 640);
+    panel.modalContent.querySelector("#bsa-modal-panel-max-height").value = clampNumber(settings.panelMaxHeight, 420, 1200, 720);
     panel.modalContent.querySelector("#bsa-modal-summary-font-size").value = clampNumber(settings.summaryFontSize, 11, 18, 13);
     panel.modalContent.querySelector("#bsa-modal-compact-timeline").checked = settings.compactTimeline === true;
     panel.modalContent.querySelector("#bsa-modal-selection-ask").checked = settings.selectionAskEnabled !== false;
@@ -1005,7 +1005,7 @@
       providerDataConsent: content.querySelector("#bsa-modal-provider-consent")?.checked === true,
       autoSummarize: content.querySelector("#bsa-modal-auto-summarize")?.checked === true,
       maxTranscriptChars: Math.max(Number(content.querySelector("#bsa-modal-max-chars")?.value || 120000), 120000),
-      panelMaxHeight: Number(content.querySelector("#bsa-modal-panel-max-height")?.value || 640),
+      panelMaxHeight: Number(content.querySelector("#bsa-modal-panel-max-height")?.value || 720),
       summaryFontSize: Number(content.querySelector("#bsa-modal-summary-font-size")?.value || 13),
       compactTimeline: content.querySelector("#bsa-modal-compact-timeline")?.checked === true,
       selectionAskEnabled: content.querySelector("#bsa-modal-selection-ask")?.checked !== false,
