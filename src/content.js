@@ -378,6 +378,10 @@
       return true;
     }
 
+    // Width determines wrapping and therefore height. Finalize it before
+    // reserving space, so the first frame and subsequent resize passes agree.
+    panel.root.style.width = `${Math.round(authorSection.getBoundingClientRect().width)}px`;
+    panel.root.style.setProperty("--bsa-panel-max-height", `${Math.round(state.panelMaxHeight)}px`);
     applyPortalReservation(authorSection);
     positionPortalPanel(authorSection);
     delete panel.root.dataset.placementPending;
@@ -453,14 +457,18 @@
 
   function positionPortalPanel(authorSection) {
     const authorRect = authorSection.getBoundingClientRect();
-    panel.root.style.setProperty("--bsa-panel-max-height", `${Math.round(state.panelMaxHeight)}px`);
-    const panelHeight = panel.root.getBoundingClientRect().height;
+    // The host page may make body a positioned containing block after loading.
+    // Compare viewport rectangles instead of treating CSS top/left as document
+    // coordinates; this also handles a non-zero body offset and scrolling.
+    if (!panel.root.style.top) panel.root.style.top = "0px";
+    if (!panel.root.style.left) panel.root.style.left = "0px";
+    const panelRect = panel.root.getBoundingClientRect();
+    const panelHeight = Math.ceil(panelRect.height);
     const top = state.sidebarOrder === "author-first"
-      ? window.scrollY + authorRect.bottom + 12
-      : window.scrollY + authorRect.top - panelHeight - 12;
-    panel.root.style.left = `${Math.round(window.scrollX + authorRect.left)}px`;
-    panel.root.style.top = `${Math.round(top)}px`;
-    panel.root.style.width = `${Math.round(authorRect.width)}px`;
+      ? authorRect.bottom + 12
+      : authorRect.top - panelHeight - 12;
+    panel.root.style.left = `${Math.round(parseFloat(panel.root.style.left) + authorRect.left - panelRect.left)}px`;
+    panel.root.style.top = `${Math.round(parseFloat(panel.root.style.top) + top - panelRect.top)}px`;
   }
 
   function expandAuthorSection(node) {
