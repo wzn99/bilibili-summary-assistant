@@ -172,6 +172,14 @@ function createJsonResponse(data) {
   assert.equal(syncData.apiKey, undefined);
   assert.equal(localData["bsa-provider-api-key"], "legacy-key");
   assert.equal(syncData.autoSummarize, true);
+  // A stale page saving its full form must not restore the mismatched defaults.
+  await context.__test.saveSettings({
+    ...savedTranscription,
+    transcriptionProvider: "openai_compatible"
+  }, { skipPermissionRequest: true });
+  assert.equal(syncData.transcriptionProvider, "openai_compatible");
+  assert.equal(syncData.transcriptionBaseUrl, migrated.transcriptionBaseUrl);
+  assert.equal(syncData.transcriptionModel, migrated.transcriptionModel);
   const required = context.__test.requiredProviderOrigins({
       providerDataConsent: true,
       baseUrl: "https://llm.example.com/v1",

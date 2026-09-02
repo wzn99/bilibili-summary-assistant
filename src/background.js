@@ -253,6 +253,12 @@ async function saveSettings(patch, options = {}) {
 }
 
 function normalizeSettings(settings) {
+  // A still-open settings page can submit the old preset after an upgrade.
+  // Repair the known mismatch before writing it back, not only while reading.
+  settings = {
+    ...settings,
+    ...getTranscriptionPresetPatch(settings.transcriptionProvider, settings.transcriptionBaseUrl, settings.transcriptionModel)
+  };
   const maxTranscriptChars = Number(settings.maxTranscriptChars || DEFAULT_SETTINGS.maxTranscriptChars);
   return {
     apiKey: normalizeApiKey(settings.apiKey || ""),
@@ -296,7 +302,7 @@ function getTranscriptionEndpoint(settings) {
   const value = String(
     settings.transcriptionBaseUrl
       || (settings.transcriptionProvider === "dashscope_filetrans"
-        ? DEFAULT_SETTINGS.transcriptionBaseUrl
+        ? "https://dashscope.aliyuncs.com/api/v1/services/audio/asr/transcription"
         : "")
   ).trim();
   if (!value) throw new Error("请填写转写服务 URL");

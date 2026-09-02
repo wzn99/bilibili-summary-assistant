@@ -335,7 +335,7 @@ function requiredProviderOrigins(settings) {
   if (summaryOrigin !== "https://api.deepseek.com/*") origins.push(summaryOrigin);
   const transcriptionUrl = settings.transcriptionBaseUrl
     || (settings.transcriptionProvider === "dashscope_filetrans"
-      ? DEFAULT_SETTINGS.transcriptionBaseUrl
+      ? "https://dashscope.aliyuncs.com/api/v1/services/audio/asr/transcription"
       : "");
   if (transcriptionUrl) origins.push(originFromUrl(transcriptionUrl));
   return [...new Set(origins)];
