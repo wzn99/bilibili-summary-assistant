@@ -115,8 +115,23 @@ function createJsonResponse(data) {
   assert.equal(migrated.apiKey, "legacy-key");
   assert.equal(migrated.themeMode, "system");
   assert.equal(migrated.autoSummarize, false);
+  assert.equal(migrated.transcriptionProvider, "openai_compatible");
+  assert.equal(migrated.transcriptionBaseUrl, "https://openrouter.ai/api/v1/audio/transcriptions");
+  assert.equal(migrated.transcriptionModel, "openai/whisper-large-v3-turbo");
   assert.equal(localData["bsa-provider-api-key"], "legacy-key");
   assert.equal("apiKey" in syncData, false);
+
+  const savedTranscription = {
+    transcriptionProvider: "dashscope_filetrans",
+    transcriptionBaseUrl: "https://dashscope.aliyuncs.com/api/v1/services/audio/asr/transcription",
+    transcriptionModel: "qwen-audio-3.0-asr-flash-filetrans"
+  };
+  Object.assign(syncData, savedTranscription);
+  const existing = await context.__test.getSettings();
+  for (const [key, value] of Object.entries(savedTranscription)) {
+    assert.equal(existing[key], value, `Preserve saved ${key}`);
+    delete syncData[key];
+  }
 
   await assert.rejects(
     () => context.__test.saveSettings({
@@ -130,14 +145,14 @@ function createJsonResponse(data) {
   assert.deepStrictEqual(permissionRequests, []);
   assert.equal(syncData.autoSummarize, undefined);
 
-  permissionRequests.push("https://llm.example.com/*", "https://dashscope.aliyuncs.com/*");
+  permissionRequests.push("https://llm.example.com/*", "https://openrouter.ai/*");
   await context.__test.saveSettings({
     baseUrl: "https://llm.example.com/v1",
     model: "example-model",
     providerDataConsent: true,
     autoSummarize: true
   }, { skipPermissionRequest: true });
-  assert.deepStrictEqual(permissionRequests, ["https://llm.example.com/*", "https://dashscope.aliyuncs.com/*"]);
+  assert.deepStrictEqual(permissionRequests, ["https://llm.example.com/*", "https://openrouter.ai/*"]);
   assert.equal(syncData.apiKey, undefined);
   assert.equal(localData["bsa-provider-api-key"], "legacy-key");
   assert.equal(syncData.autoSummarize, true);

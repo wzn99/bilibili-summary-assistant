@@ -938,10 +938,10 @@
     panel.modalContent.querySelector("#bsa-modal-api-key").value = settings.apiKey || "";
     panel.modalContent.querySelector("#bsa-modal-base-url").value = settings.baseUrl || "https://api.deepseek.com";
     panel.modalContent.querySelector("#bsa-modal-model").value = settings.model || "deepseek-v4-flash";
-    panel.modalContent.querySelector("#bsa-modal-transcription-provider").value = settings.transcriptionProvider || "dashscope_filetrans";
+    panel.modalContent.querySelector("#bsa-modal-transcription-provider").value = settings.transcriptionProvider || "openai_compatible";
     panel.modalContent.querySelector("#bsa-modal-transcription-api-key").value = settings.transcriptionApiKey || "";
-    panel.modalContent.querySelector("#bsa-modal-transcription-base-url").value = settings.transcriptionBaseUrl || "https://dashscope.aliyuncs.com/api/v1/services/audio/asr/transcription";
-    panel.modalContent.querySelector("#bsa-modal-transcription-model").value = settings.transcriptionModel || "qwen-audio-3.0-asr-flash-filetrans";
+    panel.modalContent.querySelector("#bsa-modal-transcription-base-url").value = settings.transcriptionBaseUrl ?? "https://openrouter.ai/api/v1/audio/transcriptions";
+    panel.modalContent.querySelector("#bsa-modal-transcription-model").value = settings.transcriptionModel || "openai/whisper-large-v3-turbo";
     panel.modalContent.querySelector("#bsa-modal-transcription-chunk-seconds").value = clampNumber(settings.transcriptionChunkSeconds, 60, 3600, 300);
     panel.modalContent.querySelector("#bsa-modal-transcription-request-timeout").value = clampNumber(settings.transcriptionRequestTimeoutSeconds, 30, 3600, 180);
     panel.modalContent.querySelector("#bsa-modal-transcription-poll-timeout").value = clampNumber(settings.transcriptionPollTimeoutSeconds, 30, 7200, 3600);
@@ -975,7 +975,7 @@
   }
 
   function updateModalTranscriptionVisibility(content) {
-    const provider = content.querySelector("#bsa-modal-transcription-provider")?.value || "dashscope_filetrans";
+    const provider = content.querySelector("#bsa-modal-transcription-provider")?.value || "openai_compatible";
     content.querySelectorAll("[data-transcription-mode]").forEach((field) => {
       field.hidden = field.dataset.transcriptionMode !== provider;
     });
