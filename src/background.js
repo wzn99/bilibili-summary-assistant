@@ -2,6 +2,7 @@
 if (typeof importScripts === "function") {
   importScripts("audio-utils.js");
   importScripts("history-search.js");
+  importScripts("transcription-presets.js");
 }
 // Version: 0.24.8
 const DEFAULT_SETTINGS = {
@@ -182,6 +183,13 @@ async function getSettings() {
   }
   if (Object.prototype.hasOwnProperty.call(stored, "apiKey")) {
     await chrome.storage.sync.remove("apiKey");
+  }
+  const presetPatch = getTranscriptionPresetPatch(
+    stored.transcriptionProvider, stored.transcriptionBaseUrl, stored.transcriptionModel
+  );
+  if (Object.keys(presetPatch).length) {
+    await chrome.storage.sync.set(presetPatch);
+    Object.assign(stored, presetPatch);
   }
   return normalizeSettings({
     ...DEFAULT_SETTINGS,

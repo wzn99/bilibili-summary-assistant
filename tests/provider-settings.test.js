@@ -78,6 +78,7 @@ const context = {
   importScripts() {},
   fetch: (...args) => fetchImpl(...args)
 };
+vm.runInNewContext(fs.readFileSync(path.join(__dirname, "../src/transcription-presets.js"), "utf8"), context);
 vm.runInNewContext(source, context, { filename: sourcePath });
 
 function createStreamResponse(content) {
@@ -132,6 +133,21 @@ function createJsonResponse(data) {
     assert.equal(existing[key], value, `Preserve saved ${key}`);
     delete syncData[key];
   }
+
+  // Upgrade the exact stale combination from the old provider selector.
+  Object.assign(syncData, savedTranscription, { transcriptionProvider: "openai_compatible" });
+  localData["bsa-transcription-api-key"] = "test-transcription-key";
+  const upgraded = await context.__test.getSettings();
+  assert.equal(upgraded.transcriptionBaseUrl, migrated.transcriptionBaseUrl);
+  assert.equal(upgraded.transcriptionModel, migrated.transcriptionModel);
+  assert.equal(syncData.transcriptionBaseUrl, migrated.transcriptionBaseUrl);
+  assert.equal(syncData.transcriptionModel, migrated.transcriptionModel);
+  assert.equal(upgraded.transcriptionApiKey, "test-transcription-key");
+  assert.equal(localData["bsa-transcription-api-key"], "test-transcription-key");
+  assert.equal(syncData.transcriptionApiKey, undefined);
+  assert.equal((await context.__test.getSettings()).transcriptionModel, upgraded.transcriptionModel);
+  for (const key of Object.keys(savedTranscription)) delete syncData[key];
+  delete localData["bsa-transcription-api-key"];
 
   await assert.rejects(
     () => context.__test.saveSettings({

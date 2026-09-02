@@ -961,7 +961,7 @@
     form.addEventListener("focusout", (event) => {
       if (event.target?.matches("input, select")) scheduleModalSettingsSave(panel, 0);
     });
-    panel.modalContent.querySelector("#bsa-modal-transcription-provider").addEventListener("change", () => updateModalTranscriptionVisibility(panel.modalContent));
+    panel.modalContent.querySelector("#bsa-modal-transcription-provider").addEventListener("change", () => updateModalTranscriptionVisibility(panel.modalContent, true));
     updateModalTranscriptionVisibility(panel.modalContent);
     showModal(panel);
   }
@@ -974,8 +974,15 @@
     }, delay);
   }
 
-  function updateModalTranscriptionVisibility(content) {
+  function updateModalTranscriptionVisibility(content, applyPreset = false) {
     const provider = content.querySelector("#bsa-modal-transcription-provider")?.value || "openai_compatible";
+    if (applyPreset) {
+      const url = content.querySelector("#bsa-modal-transcription-base-url");
+      const model = content.querySelector("#bsa-modal-transcription-model");
+      const patch = getTranscriptionPresetPatch(provider, url.value, model.value);
+      if (patch.transcriptionBaseUrl) url.value = patch.transcriptionBaseUrl;
+      if (patch.transcriptionModel) model.value = patch.transcriptionModel;
+    }
     content.querySelectorAll("[data-transcription-mode]").forEach((field) => {
       field.hidden = field.dataset.transcriptionMode !== provider;
     });

@@ -94,6 +94,7 @@ const context = {
   importScripts() {},
   fetch: (...args) => { fetchCalls.push(args); return fetchImpl(...args); }
 };
+vm.runInNewContext(fs.readFileSync(path.join(__dirname, "../src/transcription-presets.js"), "utf8"), context);
 vm.runInNewContext(source, context, { filename: sourcePath });
 
 (async () => {

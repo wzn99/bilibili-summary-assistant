@@ -95,7 +95,7 @@ async function init() {
 
   if (page === "settings") {
     applySettingsToForm(settings);
-    els.transcriptionProvider.addEventListener("change", updateTranscriptionVisibility);
+    els.transcriptionProvider.addEventListener("change", () => updateTranscriptionVisibility(true));
     els.refreshCookies.addEventListener("click", refreshCookieStatus);
     els.exportCookies.addEventListener("click", exportCookies);
     els.importCookies.addEventListener("click", () => els.cookieFile.click());
@@ -243,7 +243,14 @@ async function importSettings() {
   }
 }
 
-function updateTranscriptionVisibility() {
+function updateTranscriptionVisibility(applyPreset = false) {
+  if (applyPreset) {
+    const patch = getTranscriptionPresetPatch(
+      els.transcriptionProvider.value, els.transcriptionBaseUrl.value, els.transcriptionModel.value
+    );
+    if (patch.transcriptionBaseUrl) els.transcriptionBaseUrl.value = patch.transcriptionBaseUrl;
+    if (patch.transcriptionModel) els.transcriptionModel.value = patch.transcriptionModel;
+  }
   els.transcriptionBaseUrlField.hidden = false;
   els.transcriptionBaseUrl.placeholder = els.transcriptionProvider.value === "dashscope_filetrans"
     ? "https://dashscope.aliyuncs.com/api/v1/services/audio/asr/transcription"

@@ -46,6 +46,7 @@
       ],
       "js": [
         "src/history-search.js",
+        "src/transcription-presets.js",
         "src/content.js"
       ],
       "css": [
