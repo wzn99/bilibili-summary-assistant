@@ -1,6 +1,6 @@
-// Version: 0.24.8
+// Version: 0.24.9
 (function boot() {
-  const BSA_VERSION = "0.24.8";
+  const BSA_VERSION = "0.24.9";
   const SUMMARY_PROTOCOL_VERSION = "anchors-v6";
   const CACHE_PREFIX = "bsa-summary-cache:";
   const modalSelectedHistoryKeys = new Set();
@@ -35,6 +35,8 @@
     qaScrollTop: 0,
     qaScrollSync: false,
     qaScrollReleaseFrame: 0,
+    activeSummaryTab: "chapters",
+    summaryScrollPositions: { chapters: 0, highlights: 0 },
     questionQuote: "",
     pendingSelectionText: "",
     isAnswering: false,
@@ -322,6 +324,8 @@
     state.qaScrollSync = false;
     cancelAnimationFrame(state.qaScrollReleaseFrame);
     state.qaScrollReleaseFrame = 0;
+    state.activeSummaryTab = "chapters";
+    state.summaryScrollPositions = { chapters: 0, highlights: 0 };
     state.questionQuote = "";
     state.pendingSelectionText = "";
     hideSelectionPopover(panel);
@@ -1768,7 +1772,7 @@
   }
 
   function renderSummary(panel, data, raw) {
-    const activeTab = panel.result.querySelector('.bsa-tab[data-active="true"]')?.dataset.tab;
+    const activeTab = state.activeSummaryTab;
     panel.root.dataset.hasResult = "true";
     panel.result.innerHTML = "";
 
@@ -1800,6 +1804,7 @@
     tabs.className = "bsa-tabs";
     const content = document.createElement("div");
     content.className = "bsa-tab-content";
+    bindSummaryScrollTracking(content);
 
     addTab(tabs, "chapters", "时间线");
     const chapters = document.createElement("section");
@@ -1921,8 +1926,15 @@
     panel.result.appendChild(shell);
     renderQaMessages(panel);
     renderQuestionQuote(panel);
-    switchTab(panel, ["highlights", "questions"].includes(activeTab) ? activeTab : "chapters");
+    switchTab(panel, ["chapters", "highlights", "questions"].includes(activeTab) ? activeTab : "chapters");
     nudgeBilibiliLayout();
+  }
+
+  function bindSummaryScrollTracking(container) {
+    container.addEventListener("scroll", () => {
+      if (!container.isConnected || state.activeSummaryTab === "questions") return;
+      state.summaryScrollPositions[state.activeSummaryTab] = container.scrollTop;
+    }, { passive: true });
   }
 
   function renderQaMessages(panel) {
@@ -2078,13 +2090,28 @@
   }
 
   function switchTab(panel, id) {
+    const content = panel.root.querySelector(".bsa-tab-content");
+    const previousTab = panel.root.querySelector('.bsa-tab[data-active="true"]')?.dataset.tab;
+    if (content && previousTab && previousTab !== "questions") {
+      state.summaryScrollPositions[previousTab] = content.scrollTop;
+    }
     for (const tab of panel.root.querySelectorAll(".bsa-tab")) {
       tab.dataset.active = tab.dataset.tab === id ? "true" : "false";
     }
     for (const section of panel.root.querySelectorAll("[data-panel]")) {
       section.hidden = section.dataset.panel !== id;
     }
-    if (id === "questions") requestAnimationFrame(() => renderQaMessages(panel));
+    state.activeSummaryTab = id;
+    if (id === "questions") {
+      if (content) content.scrollTop = 0;
+      requestAnimationFrame(() => renderQaMessages(panel));
+      return;
+    }
+    if (content) {
+      const target = Number(state.summaryScrollPositions[id] || 0);
+      const maximum = Math.max(0, content.scrollHeight - content.clientHeight);
+      content.scrollTop = Math.min(Math.max(0, target), maximum);
+    }
   }
 
   function parseSummary(text) {

@@ -1,4 +1,4 @@
-/* Version: 0.24.8 */
+/* Version: 0.24.9 */
 #bsa-root {
   position: absolute;
   z-index: 10;
@@ -383,7 +383,7 @@ html.bsa-modal-open {
   display: grid;
   min-height: 0;
   height: 100%;
-  grid-template-rows: minmax(120px, 1fr) auto;
+  grid-template-rows: minmax(0, 1fr) auto;
   gap: 8px;
 }
 
