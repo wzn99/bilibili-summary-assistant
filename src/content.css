@@ -1,4 +1,4 @@
-/* Version: 0.24.9 */
+/* Version: 0.24.10 */
 #bsa-root {
   position: absolute;
   z-index: 10;
@@ -130,6 +130,10 @@ html.bsa-modal-open {
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
 }
 
+#bsa-root[data-has-result="true"]:not([data-collapsed="true"]) .bsa-card {
+  height: var(--bsa-panel-max-height);
+}
+
 .bsa-header {
   display: flex;
   align-items: center;
@@ -137,6 +141,7 @@ html.bsa-modal-open {
   gap: 10px;
   padding: 12px 14px 10px;
   border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+  flex: 0 0 auto;
 }
 
 .bsa-header-actions {
@@ -304,7 +309,7 @@ html.bsa-modal-open {
 
 .bsa-summary-shell {
   display: grid;
-  height: calc(var(--bsa-panel-max-height) - 74px);
+  height: 100%;
   min-height: 0;
   grid-template-rows: auto auto minmax(0, 1fr);
   gap: 10px;

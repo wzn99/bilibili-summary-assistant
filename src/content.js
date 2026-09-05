@@ -1,6 +1,6 @@
-// Version: 0.24.9
+// Version: 0.24.10
 (function boot() {
-  const BSA_VERSION = "0.24.9";
+  const BSA_VERSION = "0.24.10";
   const SUMMARY_PROTOCOL_VERSION = "anchors-v6";
   const CACHE_PREFIX = "bsa-summary-cache:";
   const modalSelectedHistoryKeys = new Set();

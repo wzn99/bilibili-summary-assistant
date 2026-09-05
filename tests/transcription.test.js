@@ -174,7 +174,7 @@ vm.runInNewContext(source, context, { filename: sourcePath });
   assert.doesNotMatch(fetchError.message, /^Failed to fetch$/);
 
   const manifest = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "manifest.json"), "utf8"));
-  assert.equal(manifest.version, "0.24.9");
+  assert.equal(manifest.version, "0.24.10");
   assert.equal(manifest.host_permissions.includes("*://*.bilivideo.com/*"), true);
   assert.equal(manifest.host_permissions.includes("*://*.bilivideo.cn/*"), true);
   assert.equal(manifest.permissions.includes("offscreen"), true);

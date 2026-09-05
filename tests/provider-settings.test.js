@@ -358,7 +358,9 @@ function createJsonResponse(data) {
   assert.doesNotMatch(contentSource, /window\.innerHeight\s*-\s*120/);
   assert.match(contentSource, /--bsa-panel-max-height", `\$\{Math\.round\(state\.panelMaxHeight\)\}px`/);
   const contentCssSource = fs.readFileSync(path.join(__dirname, "..", "src", "content.css"), "utf8");
-  assert.match(contentCssSource, /height:\s*calc\(var\(--bsa-panel-max-height\) - 74px\)/);
+  assert.match(contentCssSource, /#bsa-root\[data-has-result="true"\]:not\(\[data-collapsed="true"\]\) \.bsa-card\s*\{[\s\S]*?height:\s*var\(--bsa-panel-max-height\)/);
+  assert.match(contentCssSource, /\.bsa-summary-shell\s*\{[\s\S]*?height:\s*100%/);
+  assert.doesNotMatch(contentCssSource, /height:\s*calc\(var\(--bsa-panel-max-height\) - \d+px\)/);
   assert.doesNotMatch(contentCssSource, /height:\s*min\(528px,\s*calc\(var\(--bsa-panel-max-height\)/);
   assert.match(contentCssSource, /\.bsa-modal-field select,[\s\S]*?appearance:\s*none/);
   assert.match(contentCssSource, /\.bsa-modal-history-search input\[type="search"\][\s\S]*?background-color:\s*#202631/);

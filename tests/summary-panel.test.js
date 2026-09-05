@@ -73,5 +73,7 @@ assert.equal(replacement.panels.find((panel) => panel.dataset.panel === "highlig
 const css = fs.readFileSync(path.join(__dirname, "../src/content.css"), "utf8");
 assert.match(css, /\.bsa-qa\s*\{[\s\S]*?grid-template-rows:\s*minmax\(0, 1fr\) auto;/);
 assert.doesNotMatch(css, /\.bsa-qa\s*\{[\s\S]*?grid-template-rows:\s*minmax\(120px, 1fr\) auto;/);
+assert.match(css, /#bsa-root\[data-has-result="true"\]:not\(\[data-collapsed="true"\]\) \.bsa-card\s*\{[\s\S]*?height:\s*var\(--bsa-panel-max-height\)/);
+assert.match(css, /\.bsa-summary-shell\s*\{[\s\S]*?height:\s*100%/);
 
 console.log("summary panel tests passed");
