@@ -75,5 +75,7 @@ assert.match(css, /\.bsa-qa\s*\{[\s\S]*?grid-template-rows:\s*minmax\(0, 1fr\) a
 assert.doesNotMatch(css, /\.bsa-qa\s*\{[\s\S]*?grid-template-rows:\s*minmax\(120px, 1fr\) auto;/);
 assert.match(css, /#bsa-root\[data-has-result="true"\]:not\(\[data-collapsed="true"\]\) \.bsa-card\s*\{[\s\S]*?height:\s*var\(--bsa-panel-max-height\)/);
 assert.match(css, /\.bsa-summary-shell\s*\{[\s\S]*?height:\s*100%/);
+assert.match(css, /\.bsa-tab-content:has\(\.bsa-qa:not\(\[hidden\]\)\)\s*\{[\s\S]*?display:\s*flex;[\s\S]*?flex-direction:\s*column;/);
+assert.match(css, /\.bsa-qa:not\(\[hidden\]\)\s*\{[\s\S]*?height:\s*auto;[\s\S]*?flex:\s*1 1 auto;/);
 
 console.log("summary panel tests passed");

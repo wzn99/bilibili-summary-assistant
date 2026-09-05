@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "B站视频总结助手",
   "description": "读取 B 站公开视频字幕，并使用可配置的 OpenAI 兼容 LLM API 生成视频总结。",
-  "version": "0.24.10",
+  "version": "0.24.11",
   "icons": {
     "16": "assets/icon-16.png",
     "32": "assets/icon-32.png",

@@ -1,4 +1,4 @@
-/* Version: 0.24.10 */
+/* Version: 0.24.11 */
 #bsa-root {
   position: absolute;
   z-index: 10;
@@ -374,6 +374,8 @@ html.bsa-modal-open {
 }
 
 .bsa-tab-content:has(.bsa-qa:not([hidden])) {
+  display: flex;
+  flex-direction: column;
   overflow-y: hidden !important;
   padding-bottom: 0;
 }
@@ -390,6 +392,11 @@ html.bsa-modal-open {
   height: 100%;
   grid-template-rows: minmax(0, 1fr) auto;
   gap: 8px;
+}
+
+.bsa-qa:not([hidden]) {
+  height: auto;
+  flex: 1 1 auto;
 }
 
 .bsa-qa-messages {
