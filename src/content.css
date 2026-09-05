@@ -1,4 +1,4 @@
-/* Version: 0.24.11 */
+/* Version: 0.24.12 */
 #bsa-root {
   position: absolute;
   z-index: 10;
@@ -272,6 +272,7 @@ html.bsa-modal-open {
 }
 
 .bsa-status {
+  grid-row: 1;
   display: none;
   color: #98a4b3;
   font-size: 12px;
@@ -284,6 +285,8 @@ html.bsa-modal-open {
 }
 
 .bsa-result {
+  /* Keep the result in the flexible row even when the status is hidden. */
+  grid-row: 2;
   height: 100%;
   min-height: 0;
   overflow: hidden;
@@ -317,6 +320,7 @@ html.bsa-modal-open {
 }
 
 .bsa-overview {
+  grid-row: 1;
   padding: 10px;
   border: 1px solid rgba(148, 163, 184, 0.14);
   border-radius: 8px;
@@ -338,6 +342,7 @@ html.bsa-modal-open {
 }
 
 .bsa-tabs {
+  grid-row: 2;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 6px;
@@ -364,6 +369,7 @@ html.bsa-modal-open {
 }
 
 .bsa-tab-content {
+  grid-row: 3;
   min-height: 0;
   overflow-x: hidden;
   overflow-y: auto !important;
