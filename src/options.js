@@ -14,6 +14,7 @@ const DEFAULT_SETTINGS = {
   panelMaxHeight: 720,
   summaryFontSize: 13,
   hideDanmakuList: true,
+  commentInfoEnabled: false,
   sidebarOrder: "summary-first",
   themeMode: "system",
   compactTimeline: false,
@@ -57,6 +58,7 @@ const els = {
   panelMaxHeight: document.querySelector("#panelMaxHeight"),
   summaryFontSize: document.querySelector("#summaryFontSize"),
   hideDanmakuList: document.querySelector("#hideDanmakuList"),
+  commentInfoEnabled: document.querySelector("#commentInfoEnabled"),
   sidebarOrder: document.querySelector("#sidebarOrder"),
   themeMode: document.querySelector("#themeMode"),
   compactTimeline: document.querySelector("#compactTimeline"),
@@ -142,6 +144,7 @@ async function save() {
     panelMaxHeight: Number(els.panelMaxHeight.value || DEFAULT_SETTINGS.panelMaxHeight),
     summaryFontSize: Number(els.summaryFontSize.value || DEFAULT_SETTINGS.summaryFontSize),
     hideDanmakuList: els.hideDanmakuList.checked,
+    commentInfoEnabled: els.commentInfoEnabled.checked,
     sidebarOrder: els.sidebarOrder.value === "author-first" ? "author-first" : "summary-first",
     themeMode: new Set(["light", "dark"]).has(els.themeMode.value) ? els.themeMode.value : "system",
     compactTimeline: els.compactTimeline.checked,
@@ -173,7 +176,7 @@ const SETTING_FIELDS = [
   "transcriptionBaseUrl", "transcriptionModel", "transcriptionChunkSeconds",
   "transcriptionRequestTimeoutSeconds", "transcriptionPollTimeoutSeconds",
   "providerDataConsent", "autoSummarize", "maxTranscriptChars", "panelMaxHeight", "summaryFontSize", "hideDanmakuList",
-  "sidebarOrder", "themeMode", "compactTimeline", "selectionAskEnabled"
+  "sidebarOrder", "themeMode", "compactTimeline", "selectionAskEnabled", "commentInfoEnabled"
 ];
 
 function applySettingsToForm(settings) {
@@ -193,6 +196,7 @@ function applySettingsToForm(settings) {
   els.panelMaxHeight.value = Math.min(1200, Math.max(420, Number(settings.panelMaxHeight || DEFAULT_SETTINGS.panelMaxHeight)));
   els.summaryFontSize.value = Math.min(18, Math.max(11, Number(settings.summaryFontSize || DEFAULT_SETTINGS.summaryFontSize)));
   els.hideDanmakuList.checked = settings.hideDanmakuList !== false;
+  els.commentInfoEnabled.checked = settings.commentInfoEnabled === true;
   els.sidebarOrder.value = settings.sidebarOrder === "author-first" ? "author-first" : "summary-first";
   els.themeMode.value = new Set(["light", "dark"]).has(settings.themeMode) ? settings.themeMode : "system";
   els.compactTimeline.checked = settings.compactTimeline === true;

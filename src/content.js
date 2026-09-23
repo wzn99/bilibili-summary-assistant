@@ -1,6 +1,6 @@
-// Version: 0.24.12
+// Version: 0.25.0
 (function boot() {
-  const BSA_VERSION = "0.24.12";
+  const BSA_VERSION = "0.25.0";
   const SUMMARY_PROTOCOL_VERSION = "anchors-v6";
   const CACHE_PREFIX = "bsa-summary-cache:";
   const modalSelectedHistoryKeys = new Set();
@@ -935,6 +935,7 @@
         <label class="bsa-modal-toggle"><span><strong>紧凑时间线</strong><small>将章节做成时间线内的子标签，一次只显示一个时间段。</small></span><input id="bsa-modal-compact-timeline" type="checkbox" role="switch"></label>
         <label class="bsa-modal-toggle"><span><strong>选中文字后提问</strong><small>选中总结文字时显示“提问”，并把引用带入提问区。</small></span><input id="bsa-modal-selection-ask" type="checkbox" role="switch"></label>
         <label class="bsa-modal-toggle"><span><strong>屏蔽弹幕列表</strong><small>隐藏右侧弹幕列表，不影响播放器内弹幕。</small></span><input id="bsa-modal-hide-danmaku" type="checkbox" role="switch"></label>
+        <label class="bsa-modal-toggle"><span><strong>评论区信息增强</strong><small>显示 B 站返回的公开性别和 IP 属地；未公开的信息不显示。</small></span><input id="bsa-modal-comment-info" type="checkbox" role="switch"></label>
         <label class="bsa-modal-field"><span>右栏顶部顺序</span><select id="bsa-modal-sidebar-order"><option value="summary-first">视频总结在上</option><option value="author-first">UP 主信息在上</option></select></label>
         <div class="bsa-modal-actions"><button class="bsa-modal-secondary" type="button" data-action="open-full-options">Cookie 与配置文件工具</button><span class="bsa-modal-status" role="status"></span></div>
       </div>
@@ -958,6 +959,7 @@
     panel.modalContent.querySelector("#bsa-modal-compact-timeline").checked = settings.compactTimeline === true;
     panel.modalContent.querySelector("#bsa-modal-selection-ask").checked = settings.selectionAskEnabled !== false;
     panel.modalContent.querySelector("#bsa-modal-hide-danmaku").checked = settings.hideDanmakuList !== false;
+    panel.modalContent.querySelector("#bsa-modal-comment-info").checked = settings.commentInfoEnabled === true;
     panel.modalContent.querySelector("#bsa-modal-sidebar-order").value = settings.sidebarOrder === "author-first" ? "author-first" : "summary-first";
     const form = panel.modalContent.querySelector(".bsa-modal-form");
     form.addEventListener("input", () => scheduleModalSettingsSave(panel));
@@ -1014,6 +1016,7 @@
       compactTimeline: content.querySelector("#bsa-modal-compact-timeline")?.checked === true,
       selectionAskEnabled: content.querySelector("#bsa-modal-selection-ask")?.checked !== false,
       hideDanmakuList: content.querySelector("#bsa-modal-hide-danmaku")?.checked !== false,
+      commentInfoEnabled: content.querySelector("#bsa-modal-comment-info")?.checked === true,
       sidebarOrder: content.querySelector("#bsa-modal-sidebar-order")?.value === "author-first" ? "author-first" : "summary-first"
     };
     if (!content.querySelector(".bsa-modal-form")) return;

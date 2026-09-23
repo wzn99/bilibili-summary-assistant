@@ -116,6 +116,12 @@ function createJsonResponse(data) {
   assert.equal(migrated.apiKey, "legacy-key");
   assert.equal(migrated.themeMode, "system");
   assert.equal(migrated.autoSummarize, false);
+  assert.equal(migrated.commentInfoEnabled, false);
+  syncData.commentInfoEnabled = true;
+  assert.equal((await context.__test.getSettings()).commentInfoEnabled, true);
+  syncData.commentInfoEnabled = "true";
+  assert.equal((await context.__test.getSettings()).commentInfoEnabled, false);
+  delete syncData.commentInfoEnabled;
   assert.equal(migrated.transcriptionProvider, "openai_compatible");
   assert.equal(migrated.transcriptionBaseUrl, "https://openrouter.ai/api/v1/audio/transcriptions");
   assert.equal(migrated.transcriptionModel, "openai/whisper-large-v3-turbo");
@@ -166,12 +172,16 @@ function createJsonResponse(data) {
     baseUrl: "https://llm.example.com/v1",
     model: "example-model",
     providerDataConsent: true,
+    commentInfoEnabled: true,
     autoSummarize: true
   }, { skipPermissionRequest: true });
   assert.deepStrictEqual(permissionRequests, ["https://llm.example.com/*", "https://openrouter.ai/*"]);
   assert.equal(syncData.apiKey, undefined);
   assert.equal(localData["bsa-provider-api-key"], "legacy-key");
   assert.equal(syncData.autoSummarize, true);
+  assert.equal(syncData.commentInfoEnabled, true);
+  await context.__test.saveSettings({ commentInfoEnabled: false }, { skipPermissionRequest: true });
+  assert.equal(syncData.commentInfoEnabled, false);
   // A stale page saving its full form must not restore the mismatched defaults.
   await context.__test.saveSettings({
     ...savedTranscription,
